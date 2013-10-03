@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>XBMC - DVD menu not displayed / Black screen when playing DVDs</title>
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+  </head>
+  <body>
+
+    <div id="header">
+      <h1><a href="/">Dennis Schneider</a></h1>
+      <span>Ruby &amp; Rails Developer // Indie Game Developer // Nihilist</span>
+    </div>
+
+    <div id="container">
+      <h1>XBMC - DVD menu not displayed / Black screen when playing DVDs</h1>
+<h4>12 Jul 2012</h4>
+
+<div id="post">
+  <p>I experienced that whenever I inserted a DVD on my Ubuntu-driven HTPC and attempt to play it using XBMC I had a black screen without any visible menu or sound. When pressing the stop button, my computer froze completely. This bug is filed here:</p>
+
+<p><a href='https://bugs.laun
+chpad.net/ubuntu/+source/xbmc/+bug/999254'>https://bugs.launchpad.net/ubuntu/+source/xbmc/+bug/999254</a></p>
+
+<p>After searching and testing around a while I found an interesting option in the XBMC Video Settings under the DVDs tab. There is an option called &#8220;Attempt to skip introduction before DVD menu&#8221;. I switched it on and suddenly everything works. No more black screen and no more freezing when pressing the stop button!</p>
+
+<p>My second guess would have been the solution described here:</p>
+
+<p><a href='http://harikrish.wordpress.com/2010/01/14/how-to-play-dvd-using-xbmc/'>http://harikrish.wordpress.com/2010/01/14/how-to-play-dvd-using- xbmc/</a></p>
+
+<p>Apparently disabling auto mount solves this problem as well. So if the first solution doesn&#8217;t work for you try the latter one.</p>
+</div>
+
+    </div> <!-- /container -->
+
+  </body>
+
+  <script type="text/javascript">
+
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-4647520-9']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Ruby on Rails - Stub Remote IP with RSpec</title>
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+  </head>
+  <body>
+
+    <div id="header">
+      <h1><a href="/">Dennis Schneider</a></h1>
+      <span>Ruby &amp; Rails Developer // Indie Game Developer // Nihilist</span>
+    </div>
+
+    <div id="container">
+      <h1>Ruby on Rails - Stub Remote IP with RSpec</h1>
+<h4>11 Apr 2012</h4>
+
+<div id="post">
+  <p>Today I wanted to simulate an external IP request with RSpec (2.8.0) and Rails (3.1). Unfortunately Google didn&#8217;t reveal much upon a search. So I came up with this solution:</p>
+<script src='https://gist.github.com/2941985.js'> </script>
+<p>The <em><strong>ActionDispatch</strong></em> module holds the <strong><em>Request </em></strong>class which contains information about the HTTP request, like the request body, authorization etc. It also contains a method for obtaining the associated ip address obtained by the remote ip middleware.</p>
+
+<p>As I haven&#8217;t had access to the request object, I used_<strong> any_instance</strong><em> to tell RSpec that literally any derived instance from that class should get a</em><strong>stub</strong><em>bed version of the</em>remote_ip_-method and then return a predefined ip address when that method is called.</p>
+
+<p><strong>Update</strong></p>
+
+<p>I also figured out that you can achieve that behavior by simply specifying another parameter when making a request via RSpec:</p>
+<script src='https://gist.github.com/2941990.js'> </script>
+</div>
+
+    </div> <!-- /container -->
+
+  </body>
+
+  <script type="text/javascript">
+
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-4647520-9']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+</html>

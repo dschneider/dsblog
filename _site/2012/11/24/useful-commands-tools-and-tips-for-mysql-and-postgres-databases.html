@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Useful commands, tools and tips for MySQL and Postgres databases</title>
+    <meta name="viewport" content="width=device-width">
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+  </head>
+  <body>
+
+    <div id="header">
+      <h1><a href="/">Dennis Schneider</a></h1>
+      <span>Ruby &amp; Rails Developer // Indie Game Developer // Nihilist</span>
+    </div>
+
+    <div id="container">
+      <h1>Useful commands, tools and tips for MySQL and Postgres databases</h1>
+<h4>24 Nov 2012</h4>
+
+<div id="post">
+  <p>There are some quite useful commands I had to collect from many different sources which can come in handy when working with SQL databases like MySQL and Postgres.</p>
+
+<h2 id='postgres'>Postgres</h2>
+
+<h3 id='useful_sql_statements'>Useful SQL statements</h3>
+
+<p>Show the maximum number of possible connections: SELECT name, setting FROM pg_settings WHERE name = &#8216;max_connections&#8217;;</p>
+
+<p>Show the active connections: SELECT * from pg_stat_activity;</p>
+
+<p>Show the number of active connections: SELECT COUNT(*) from pg_stat_activity;</p>
+
+<p>Log in to database via terminal (with password): psql -h HOST -p 5432 -d DATABASE_NAME -U USER_NAME -W</p>
+
+<h3 id='heroku_postgres_app'>Heroku Postgres App</h3>
+
+<p>The Mac OS X Postgres app from Heroku saves you a lot of hassle. Just download the app and drop it into your Applications folder and you are ready to go -&gt; <a href='http://postgresapp.com/'>http://postgresapp.com/</a></p>
+
+<p>When using this app, the postgresql.conf can be found in ~/Library/Application\ Support/Postgres/var/postgresql.conf</p>
+
+<h3 id='postgres__bumping_up_the_maximum_number_of_connections_on_nixsystems'>Postgres - Bumping up the maximum number of connections on nix-systems</h3>
+
+<p>The value for the maximum number of connections can be found in the aforementioned postgresql.conf file. It&#8217;s called &#8220;max_connections&#8221;. If you want to bump it up, you must also consider increasing the &#8220;shared_buffers&#8221; value. I currently have 200MB of shared buffers and 70 maximum allowed connections. You will have to restart the Postgres app then. If it refuses to start, it&#8217;s because your system&#8217;s kernel values for shared memory is not high enough. In order to adjust that, use the following commands in your terminal:</p>
+
+<p><strong>sudo sysctl -w kern.sysv.shmall=1073741824</strong></p>
+
+<p><strong>sudo sysctl -w kern.sysv.shmmax=1073741824</strong></p>
+
+<p>This will bump up the shared memory to a maximum of 1024MB. SHMALL refers to the total amount of shared memory pages that can be used system wide. If you want to dig deeper, then read this: <a href='http://www.puschitz.com/TuningLinuxForOracle.sh
+tml#SettingSharedMemory'>http://www.puschitz.com/TuningLinuxForOra cle.shtml#SettingSharedMemory</a></p>
+
+<h3 id='use_postgres_as_an_inmemory_database'><strong>Use Postgres as an in-memory database</strong></h3>
+
+<p>The following changes to your Postgres config are especially useful for local development. All those settings are related to the WAL (Write-Ahead-Log). Write-Ahead-Logging consists of a couple of techniques that provide atomicity and durability which are two of the ACID properties.</p>
+
+<p>Go back to your postgresql.conf and change those values:</p>
+
+<p>fsync=off</p>
+
+<p>full_page_writes=off</p>
+
+<p>synchronous_commit=off</p>
+
+<p>bgwriter_lru_maxpages=0</p>
+
+<p><strong>fsync </strong>usually tries to make sure that updates are written to disk. This enables to recover to a consistent state after a system/hardware crash. <strong>ATTENTION: If you turn it off it can result in unrecoverable data corruption!</strong></p>
+
+<p><strong>full_page_writes </strong>will write the entire content of each disk page to the WAL (Write-Ahead-Log) during the first modification of that page after a checkpoint. It&#8217;s needed because a page write that is in process during an operating system crash might be only partially completed. <strong>AGAIN: It might speed up the database to turn this off, but if you do, it could lead to unrecoverable data corruption after a system/hardware crash!</strong></p>
+
+<p><strong>synchronous_commit </strong>specifies whether a transaction commit will wait for WAL records to be written to disk before the command returns a &#8220;success&#8221; indication to the client. It&#8217;s not too critical if you turn this off and the system crashes. It would just result in some committed transactions to be lost.</p>
+
+<p><strong>bgwriter_lru_maxpages </strong>is related to the background writer. This is a separate server process which issues writes of dirty (which means new or modified) shared buffers. This value adjusts how many buffers will be written by the aforementioned background writer. Setting it to zero will disable it completely.</p>
+
+<p>Have a look at this article, if you want to populate your database with a large amount of data: <a href='http://www.postgresql.org/docs/9.2/static/populate.html'>http://www.postgresql.org/docs/9.2/static/populate.html</a></p>
+
+<h2 id='mysql'>Mysql</h2>
+
+<h3 id='useful_sql_statements'>Useful SQL statements</h3>
+
+<p>Show the maximum number of possible connections: SHOW variables LIKE &#8216;%conn%&#8217;;</p>
+
+<p>Show the active connections: SHOW process list;</p>
+
+<p>Show the number of active connections: SELECT COUNT(id) FROM information_schema.processlist;</p>
+
+<p>Log in to database via terminal (with password): mysql -u USER_NAME -p -h HOST</p>
+
+<h4 id='sources'>Sources</h4>
+
+<p>* <a href='http://www.postgresql.org/docs/9.2/static/populate.html'>http://www.postgresql.org/docs/9.2/static/populate.html</a> * <a href='http://www.postgresql.org/docs/9.2/static/runtime-config-wal.html#GUC-FULL-PAGE-WRITES'>http://www.postgresql.org/docs/9.2/static/runtime-config-wal.html#GUC-FULL-PAGE-WRITES</a> * <a href='http://www.postgresql.org/docs/9.2/static/wal-internals.html'>http://www.postgresql.org/docs/9.2/static/wal-internals.html</a> * <a href='http://www.postgresql.org/docs/9.2/static/runtime-config-resource.html'>http://www.postgresql.org/docs/9.2/static/runtime-config-resource.html</a> * <a href='http://en.wikipedia.org/wiki/Write-ahead_logging'>http://en.wikipedia.org/wiki/Write-ahead_logging</a> </p>
+</div>
+
+    </div> <!-- /container -->
+
+  </body>
+
+  <script type="text/javascript">
+
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-4647520-9']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+</html>
